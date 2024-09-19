@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iago-Games</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+        <h1>Iago-Games</h1>
+        <input type="text" id="search-bar" placeholder="Buscar jogos...">
+    </header>
+
+    <section class="games-grid" id="games-grid">
+        <div class="game-card" onclick="playGame('8 Ball Pool.html')">
+            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9o_RyAId8059QRyvoEGsYwjDG-hrFbzr8KQ&s" alt="Oito Ball Pool">
+            <p>Oito Ball Pool</p>
+        </div>
+        <div class="game-card" onclick="playGame('pages/flybird.html')">
+            <img src="game2.jpg" alt="Flybird">
+            <p>Bird Fly</p>
+        </div>
+        <div class="game-card" onclick="playGame('game3.html')">
+            <img src="game3.jpg" alt="Jogo 3">
+            <p>Jogo 3</p>
+        </div>
+    </section>
+
+    <script>
+        function playGame(gameUrl) {
+            window.open(gameUrl, "_blank");
+        }
+    </script>
+</body>
+</html>

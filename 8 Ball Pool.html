@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>8 Ball Pool - Dois Jogadores</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #2E8B57;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            background-color: #006400;
+            border: 5px solid #8B4513;
+        }
+
+        #controls {
+            position: absolute;
+            bottom: 20px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+            gap: 20px;
+        }
+
+        #forceBar {
+            width: 300px;
+            height: 20px;
+            background-color: lightgray;
+            border-radius: 10px;
+            overflow: hidden;
+            cursor: pointer;
+        }
+
+        #forceLevel {
+            height: 100%;
+            width: 0%;
+            background-color: red;
+            border-radius: 10px;
+        }
+
+        #scoreboard {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+        }
+
+        #directionControl {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            color: white;
+        }
+
+        #turn {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            color: white;
+            font-size: 24px;
+        }
+
+        #victoryMessage {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 20px;
+            font-size: 32px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="poolTable" width="800" height="400"></canvas>
+
+    <!-- Controles de Força -->
+    <div id="controls">
+        <div id="forceBar">
+            <div id="forceLevel"></div>
+        </div>
+    </div>
+
+    <!-- Placar -->
+    <div id="scoreboard">
+        Placar: <span id="score1">0</span> - <span id="score2">0</span>
+    </div>
+
+    <!-- Controle de Direção -->
+    <div id="directionControl">Use o mouse para ajustar a mira</div>
+
+    <!-- Indica quem é o turno -->
+    <div id="turn">Jogador 1</div>
+
+    <!-- Mensagem de Vitória -->
+    <div id="victoryMessage">Vitória!</div>
+
+    <script>
+        const canvas = document.getElementById('poolTable');
+        const ctx = canvas.getContext('2d');
+
+        // Placar
+        let score = [0, 0];
+        const scoreElement1 = document.getElementById('score1');
+        const scoreElement2 = document.getElementById('score2');
+
+        // Propriedades das bolas
+        const balls = [
+            { x: 100, y: canvas.height / 2, radius: 10, dx: 0, dy: 0, color: '#FFFFFF', type: 'cue', initialX: 100, initialY: canvas.height / 2 }, // Bola branca
+            { x: canvas.width - 100, y: canvas.height / 2, radius: 10, dx: 0, dy: 0, color: '#FF0000', type: 'solid' }, // Bola lisa vermelha
+            { x: canvas.width - 130, y: canvas.height / 2 - 20, radius: 10, dx: 0, dy: 0, color: '#0000FF', type: 'solid' }, // Bola lisa azul
+            { x: canvas.width - 130, y: canvas.height / 2 + 20, radius: 10, dx: 0, dy: 0, color: '#FFFF00', type: 'solid' }, // Bola lisa amarela
+            { x: canvas.width - 160, y: canvas.height / 2 - 40, radius: 10, dx: 0, dy: 0, color: '#FF00FF', type: 'striped' }, // Bola listrada rosa
+            { x: canvas.width - 160, y: canvas.height / 2, radius: 10, dx: 0, dy: 0, color: '#00FF00', type: 'solid' }, // Bola lisa verde
+            { x: canvas.width - 160, y: canvas.height / 2 + 40, radius: 10, dx: 0, dy: 0, color: '#FF8800', type: 'striped' }, // Bola listrada laranja
+            { x: canvas.width - 190, y: canvas.height / 2 - 20, radius: 10, dx: 0, dy: 0, color: '#FFCC00', type: 'solid' }, // Bola lisa amarela clara
+            { x: canvas.width - 190, y: canvas.height / 2 + 20, radius: 10, dx: 0, dy: 0, color: '#0000FF', type: 'striped' }, // Bola listrada azul clara
+        ];
+
+        // Caçapas (os buracos)
+        const pockets = [
+            { x: 0, y: 0 }, // Esquerda superior
+            { x: canvas.width / 2, y: 0 }, // Centro superior
+            { x: canvas.width, y: 0 }, // Direita superior
+            { x: 0, y: canvas.height }, // Esquerda inferior
+            { x: canvas.width / 2, y: canvas.height }, // Centro inferior
+            { x: canvas.width, y: canvas.height } // Direita inferior
+        ];
+
+        // Controle de força e mira
+        let force = 0;
+        const maxForce = 20;
+        const forceBar = document.getElementById('forceLevel');
+
+        // Propriedades do taco
+        let cueStickAngle = 0;
+        let cueStickPower = 0;
+
+        // Estado do jogo
+        let currentPlayer = 1;
+        const turnElement = document.getElementById('turn');
+        const victoryMessage = document.getElementById('victoryMessage');
+
+        // Atualiza a barra de força
+        function updateForceBar() {
+            const forcePercentage = (force / maxForce) * 100;
+            forceBar.style.width = forcePercentage + '%';
+        }
+
+        // Desenhar as bolas
+        function drawBalls() {
+            balls.forEach(ball => {
+                ctx.beginPath();
+                ctx.arc(ball.x, ball.y, ball.radius, 0, Math.PI * 2);
+                ctx.fillStyle = ball.color;
+                ctx.fill();
+                ctx.strokeStyle = '#000000';
+                ctx.stroke();
+                ctx.closePath();
+            });
+        }
+
+        // Desenhar caçapas
+        function drawPockets() {
+            pockets.forEach(pocket => {
+                ctx.beginPath();
+                ctx.arc(pocket.x, pocket.y, 20, 0, Math.PI * 2);
+                ctx.fillStyle = 'black';
+                ctx.fill();
+                ctx.closePath();
+            });
+        }
+
+        // Desenhar a borda da mesa
+        function drawBorder() {
+            ctx.beginPath();
+            ctx.lineWidth = 10;
+            ctx.strokeStyle = '#8B4513';
+            ctx.rect(0, 0, canvas.width, canvas.height);
+            ctx.stroke();
+            ctx.closePath();
+        }
+
+        // Verifica se a bola está em uma caçapa
+        function checkPockets() {
+            balls.forEach((ball, index) => {
+                pockets.forEach(pocket => {
+                    const dist = Math.hypot(ball.x - pocket.x, ball.y - pocket.y);
+                    if (dist < 20) {
+                        if (ball.type === 'cue') {
+                            // Bola branca é encaçapada
+                            ball.x = canvas.width / 2;
+                            ball.y = canvas.height / 2 + 80;
+                            ball.dx = 0;
+                            ball.dy = 0;
+                        } else {
+                            // Outras bolas são removidas
+                            balls.splice(index, 1);
+                            updateScore();
+                            checkVictory();
+                        }
+                    }
+                });
+            });
+        }
+
+        // Atualizar a pontuação
+        function updateScore() {
+            score[currentPlayer - 1]++;
+            scoreElement1.textContent = score[0];
+            scoreElement2.textContent = score[1];
+        }
+
+        // Verifica se todas as bolas foram encaçapadas
+        function checkVictory() {
+            const remainingBalls = balls.filter(ball => ball.type !== 'cue');
+            if (remainingBalls.length === 0) {
+                victoryMessage.style.display = 'block';
+            }
+        }
+
+        // Função de colisão entre bolas
+        function checkBallCollision(ball1, ball2) {
+            const dx = ball2.x - ball1.x;
+            const dy = ball2.y - ball1.y;
+            const distance = Math.hypot(dx, dy);
+
+            if (distance < ball1.radius + ball2.radius) {
+                const combinedRadii = ball1.radius + ball2.radius;
+                const overlap = combinedRadii - distance;
+                const angle = Math.atan2(dy, dx);
+                const moveX = Math.cos(angle) * overlap / 2;
+                const moveY = Math.sin(angle) * overlap / 2;
+
+                ball1.x -= moveX;
+                ball1.y -= moveY;
+                ball2.x += moveX;
+                ball2.y += moveY;
+
+                // Trocar velocidades
+                const tempDx = ball1.dx;
+                const tempDy = ball1.dy;
+                ball1.dx = ball2.dx;
+                ball1.dy = ball2.dy;
+                ball2.dx = tempDx;
+                ball2.dy = tempDy;
+
+                // Espalhar bolas com mais força
+                ball1.dx *= 1.8;
+                ball1.dy *= 1.8;
+                ball2.dx *= 1.8;
+                ball2.dy *= 1.8;
+            }
+        }
+
+        // Colisão com as bordas da mesa
+        function checkWallCollision(ball) {
+            if (ball.x - ball.radius < 0 || ball.x + ball.radius > canvas.width) {
+                ball.dx *= -1;
+            }
+            if (ball.y - ball.radius < 0 || ball.y + ball.radius > canvas.height) {
+                ball.dy *= -1;
+            }
+        }
+
+        // Movimento das bolas
+        function moveBalls() {
+            balls.forEach(ball => {
+                ball.x += ball.dx;
+                ball.y += ball.dy;
+
+                ball.dx *= 0.98; // Fricção
+                ball.dy *= 0.98; // Fricção
+
+                checkWallCollision(ball);
+                checkPockets();
+            });
+
+            for (let i = 0; i < balls.length; i++) {
+                for (let j = i + 1; j < balls.length; j++) {
+                    checkBallCollision(balls[i], balls[j]);
+                }
+            }
+        }
+
+        // Desenha o taco
+        function drawCueStick() {
+            // Desenha o taco apenas se a bola branca estiver parada
+            if (Math.abs(balls[0].dx) < 0.1 && Math.abs(balls[0].dy) < 0.1) {
+                ctx.save();
+                ctx.translate(balls[0].x, balls[0].y);
+                ctx.rotate(cueStickAngle);
+                ctx.beginPath();
+                ctx.rect(-200, -5, 200, 10);
+                ctx.fillStyle = '#8B4513';
+                ctx.fill();
+                ctx.closePath();
+                ctx.restore();
+            }
+        }
+
+        // Atualiza o jogo
+        function update() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            drawBorder();
+            drawPockets();
+            drawBalls();
+            drawCueStick();
+
+            moveBalls();
+
+            requestAnimationFrame(update);
+        }
+
+        // Ajustar o ângulo do taco com o mouse
+        canvas.addEventListener('mousemove', event => {
+            const rect = canvas.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left;
+            const mouseY = event.clientY - rect.top;
+
+            const dx = mouseX - balls[0].x;
+            const dy = mouseY - balls[0].y;
+            cueStickAngle = Math.atan2(dy, dx);
+        });
+
+        // Aplicar força à bola branca
+        canvas.addEventListener('click', () => {
+            balls[0].dx = Math.cos(cueStickAngle) * force;
+            balls[0].dy = Math.sin(cueStickAngle) * force;
+
+            force = 0; // Resetar força
+            updateForceBar();
+
+            // Alternar entre os jogadores
+            currentPlayer = currentPlayer === 1 ? 2 : 1;
+            turnElement.textContent = `Jogador ${currentPlayer}`;
+        });
+
+        // Controle de força com o mouse
+        document.getElementById('forceBar').addEventListener('mousemove', event => {
+            const rect = event.target.getBoundingClientRect();
+            const mouseX = event.clientX - rect.left;
+            force = (mouseX / rect.width) * maxForce;
+            updateForceBar();
+        });
+
+        update();
+    </script>
+</body>
+</html>

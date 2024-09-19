@@ -1,0 +1,77 @@
+.fundo{
+	background: #0024FF;
+}
+.cabecario{
+	border: 2px solid black;
+	background: whitesmoke;
+	overflow: hidden;
+	transition: 2.1s;
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.titulo{
+	text-align: center;
+}
+.container{
+	border: 2px solid black;
+	background: #5EC3F8;
+	display: flex;
+	width: 1000px;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+}
+.volta{
+	border: 2px solid black;
+	margin-left: auto;
+	margin-right: auto;
+	width: 50px;
+	height: 40px;
+	justify-content: center;
+	background: #008AFF;
+	margin-top: 10px;
+	overflow: hidden;
+	transition: 2.1s;
+}
+.volta:hover{
+	transform: scale(1.2);
+	background: #7200FF;
+}
+.link-volta{
+	text-align: center;
+	color: black;
+	text-decoration: none;
+}
+.link-jogos{
+	color: black;
+	text-decoration: none;
+}
+.canvas-jogo{
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 20px;
+	margin-bottom: 20px;
+    border: 2px solid black;
+}
+.div-jogo{
+	margin-left: 10px;
+	margin-top: 10px;
+	border: 2px solid black;
+	text-align: center;
+	margin-bottom: 10px;
+	width: 190px;
+	height: 190px;
+}
+.image{
+	width: 150px;
+	height: 150px;
+}
+.nome-jogo{
+    border-top: 2px dashed black;
+}
+#board {
+    /* background-color: skyblue; */
+    background-image: url("../images/flappybirdbg.png");
+}
