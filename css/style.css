@@ -1,77 +1,99 @@
-.fundo{
-	background: #0024FF;
-}
-.cabecario{
-	border: 2px solid black;
-	background: whitesmoke;
-	overflow: hidden;
-	transition: 2.1s;
-	width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
+/* Estilos Globais */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
 }
 
-.titulo{
-	text-align: center;
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #0A0F1D;
+    color: #FFFFFF;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
 }
-.container{
-	border: 2px solid black;
-	background: #5EC3F8;
-	display: flex;
-	width: 1000px;
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 10px;
+
+/* Cabeçalho */
+.cabecario {
+    padding: 30px 0;
+    text-align: center;
+    position: relative;
 }
-.volta{
-	border: 2px solid black;
-	margin-left: auto;
-	margin-right: auto;
-	width: 50px;
-	height: 40px;
-	justify-content: center;
-	background: #008AFF;
-	margin-top: 10px;
-	overflow: hidden;
-	transition: 2.1s;
+
+.titulo {
+    font-size: 3rem;
+    color: #F49D37;
+    letter-spacing: 2px;
+    cursor: pointer;
+    animation: bounce 2s infinite;
 }
-.volta:hover{
-	transform: scale(1.2);
-	background: #7200FF;
+
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
 }
-.link-volta{
-	text-align: center;
-	color: black;
-	text-decoration: none;
+
+.animate-title {
+    animation: scale 0.5s forwards;
 }
-.link-jogos{
-	color: black;
-	text-decoration: none;
+
+@keyframes scale {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.2);
+    }
+    100% {
+        transform: scale(1);
+    }
 }
-.canvas-jogo{
-	margin-left: auto;
-	margin-right: auto;
-	margin-top: 20px;
-	margin-bottom: 20px;
-    border: 2px solid black;
+
+.container {
+    display: flex;
+    justify-content: center;
+    margin-top: 10px;
 }
-.div-jogo{
-	margin-left: 10px;
-	margin-top: 10px;
-	border: 2px solid black;
-	text-align: center;
-	margin-bottom: 10px;
-	width: 190px;
-	height: 190px;
+
+.canvas-jogo {
+    margin: 20px;
+    border: 2px solid #FFFFFF;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.2);
 }
-.image{
-	width: 150px;
-	height: 150px;
+
+.volta {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
 }
-.nome-jogo{
-    border-top: 2px dashed black;
+
+.volta p {
+    background: #F49D37;
+    color: #0A0F1D;
+    padding: 10px 20px;
+    border-radius: 5px;
+    transition: background 0.3s;
+    cursor: pointer;
 }
-#board {
-    /* background-color: skyblue; */
-    background-image: url("../images/flappybirdbg.png");
+
+.volta:hover p {
+    background: #FF5722;
+}
+
+/* Animações Adicionais */
+@keyframes floating {
+    0% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+    100% {
+        transform: translateY(0px);
+    }
 }

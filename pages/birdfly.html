@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bird Fly</title>
+    <link rel="stylesheet" href="../css/style.css">
+</head>
+<body class="fundo">
+    <div class="cabecario">
+        <h1 class="titulo" id="henrique-title">Bird Fly</h1>
+    </div>
+
+    <div class="container">
+        <canvas class="canvas-jogo" id="c" width="320" height="480"></canvas>
+        <script type="text/javascript" src="../scripts/flybird.js"></script>
+    </div>
+
+    <div class="volta">
+        <a href="../index.html" class="link-volta"><p>Voltar</p></a>
+    </div>
+
+    <script>
+        const title = document.getElementById('henrique-title');
+        title.addEventListener('click', () => {
+            title.classList.add('animate-title');
+            setTimeout(() => title.classList.remove('animate-title'), 1000);
+        });
+    </script>
+</body>
+</html>

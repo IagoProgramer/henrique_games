@@ -1,0 +1,46 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #1e1e1e;
+    overflow: hidden; 
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh; 
+    overflow: hidden; 
+}
+
+.jogo {
+    width: 800px; 
+    height: 600px; 
+    border: none; 
+    position: relative; 
+    top: -20px; 
+}
+
+.volta {
+    position: absolute; 
+    top: 20px; 
+    left: 20px; 
+    background-color: #444; /* Cor de fundo do botão */
+    border-radius: 5px; /* Borda arredondada */
+    padding: 10px 20px; /* Padding do botão */
+    transition: background-color 0.3s; /* Transição ao passar o mouse */
+}
+
+.volta:hover {
+    background-color: #666; /* Cor ao passar o mouse */
+}
+
+.link-volta {
+    color: #FFD700; 
+    text-decoration: none; 
+    font-size: 1.2em;
+}

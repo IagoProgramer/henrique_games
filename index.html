@@ -3,34 +3,244 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Iago-Games</title>
+    <title>Henrique-Games</title>
     <link rel="stylesheet" href="css/styles.css">
+    <style>
+        /* Estilos Globais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #0A0F1D;
+            color: #FFFFFF;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            transition: background-color 0.5s, color 0.5s; /* Transição suave */
+        }
+
+        /* Cabeçalho */
+        .header {
+            background: linear-gradient(135deg, #1A202E, #3E5061);
+            padding: 30px 0;
+            text-align: center;
+            position: relative;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background 0.5s; /* Transição suave */
+        }
+
+        .logo-container {
+            display: inline-block;
+            background: #F49D37;
+            padding: 10px 20px;
+            border-radius: 8px;
+            animation: bounce 2s infinite;
+            cursor: pointer;
+            transition: transform 0.5s; /* Transição suave */
+        }
+
+        .site-title {
+            font-size: 3rem;
+            color: #FFFFFF;
+            letter-spacing: 2px;
+            transition: transform 0.5s; /* Transição suave */
+        }
+
+        @keyframes bounce {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        #search-bar {
+            margin-top: 20px;
+            padding: 15px;
+            width: 40%;
+            border-radius: 30px;
+            border: none;
+            outline: none;
+            font-size: 1rem;
+            background-color: #2A3445;
+            color: #F0F4F8;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.5s; /* Transição suave */
+        }
+
+        /* Botão de Modo */
+        #mode-button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #F49D37;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: transform 0.3s; /* Transição suave */
+        }
+
+        #mode-button:hover {
+            transform: scale(1.05); /* Efeito ao passar o mouse */
+        }
+
+        /* Grid de Jogos */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            padding: 50px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .game-card {
+            background-color: #2A2F3A;
+            border-radius: 15px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            transition: transform 0.3s, background-color 0.3s;
+            cursor: pointer;
+            text-align: center;
+            transform: perspective(1000px) rotateY(0deg);
+            transition: transform 0.4s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-card:hover {
+            transform: scale(1.05) perspective(1000px) rotateY(10deg);
+            background-color: #1B2A3A;
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.5); /* Efeito de sombra ao passar o mouse */
+        }
+
+        .game-card img {
+            width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.5s; /* Transição suave */
+        }
+
+        .game-card:hover img {
+            transform: scale(1.1); /* Efeito de zoom na imagem */
+        }
+
+        .game-card p {
+            margin-top: 15px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            color: #F49D37;
+            transition: color 0.5s; /* Transição suave */
+        }
+
+        /* Rodapé */
+        .footer {
+            background-color: #1A202E;
+            padding: 20px;
+            text-align: center;
+            color: #FFFFFF;
+            transition: background-color 0.5s; /* Transição suave */
+        }
+
+        .footer p {
+            font-size: 1rem;
+        }
+
+        /* Animações Adicionais */
+        @keyframes floating {
+            0% {
+                transform: translateY(0px);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+            100% {
+                transform: translateY(0px);
+            }
+        }
+
+        .game-card {
+            animation: floating 3s ease-in-out infinite;
+        }
+    </style>
 </head>
 <body>
-    <header>
-        <h1>Iago-Games</h1>
+    <header class="header">
+        <div class="logo-container" id="logo">
+            <h1 class="site-title">Henrique-Games</h1>
+        </div>
         <input type="text" id="search-bar" placeholder="Buscar jogos...">
+        <button id="mode-button">Modo Claro</button>
     </header>
 
-    <section class="games-grid" id="games-grid">
+    <section class="games-grid">
         <div class="game-card" onclick="playGame('8 Ball Pool.html')">
             <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS9o_RyAId8059QRyvoEGsYwjDG-hrFbzr8KQ&s" alt="Oito Ball Pool">
             <p>Oito Ball Pool</p>
         </div>
-        <div class="game-card" onclick="playGame('pages/flybird.html')">
-            <img src="game2.jpg" alt="Flybird">
+        <div class="game-card" onclick="playGame('pages/birdfly.html')">
+            <img src="game2.jpg" alt="Bird Fly">
             <p>Bird Fly</p>
         </div>
-        <div class="game-card" onclick="playGame('game3.html')">
-            <img src="game3.jpg" alt="Jogo 3">
-            <p>Jogo 3</p>
+        <div class="game-card" onclick="playGame('mario.html')">
+            <img src="./images/mario.png" alt="Super Mario">
+            <p>Super Mario</p>
+        </div>
+        <div class="game-card" onclick="playGame('sonic.html')">
+            <img src="./images/sonic.png" alt="Sonic">
+            <p>Sonic</p>
+        </div>
+        <div class="game-card" onclick="playGame('pacman.html')">
+            <img src="./images/pacman.png" alt="Pac-Man">
+            <p>Pac-Man</p>
+        </div>
+        <div class="game-card" onclick="playGame('pages/minecraft.html')">
+            <img src="./images/minecraft.png" alt="Minecraft">
+            <p>Minecraft</p>
         </div>
     </section>
+
+    <footer class="footer">
+        <p>© 2024 Henrique-Games. Todos os direitos reservados.</p>
+    </footer>
 
     <script>
         function playGame(gameUrl) {
             window.open(gameUrl, "_blank");
         }
+
+        const modeButton = document.getElementById('mode-button');
+        modeButton.addEventListener('click', () => {
+            document.body.classList.toggle('light-mode');
+
+            if (document.body.classList.contains('light-mode')) {
+                document.body.style.backgroundColor = '#FFFFFF';
+                document.body.style.color = '#000000';
+                document.querySelectorAll('.game-card p').forEach(p => p.style.color = '#0000FF'); // Muda para azul
+                modeButton.textContent = 'Modo Escuro';
+            } else {
+                document.body.style.backgroundColor = '#0A0F1D';
+                document.body.style.color = '#FFFFFF';
+                document.querySelectorAll('.game-card p').forEach(p => p.style.color = '#F49D37'); // Muda para laranja
+                modeButton.textContent = 'Modo Claro';
+            }
+        });
+
+        // Efeito ao passar o mouse no título
+        const logo = document.getElementById('logo');
+        logo.addEventListener('mouseover', () => {
+            logo.style.transform = 'rotate(5deg)'; // Rotação leve
+        });
+
+        logo.addEventListener('mouseout', () => {
+            logo.style.transform = 'rotate(0deg)'; // Retorna à posição original
+        });
     </script>
 </body>
 </html>
