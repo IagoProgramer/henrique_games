@@ -40,14 +40,14 @@
             border-radius: 8px;
             animation: bounce 2s infinite;
             cursor: pointer;
-            transition: transform 0.5s; /* Transição suave */
+            transition: transform 0.5s, background-color 0.5s; /* Transição suave */
         }
 
         .site-title {
             font-size: 3rem;
             color: #FFFFFF;
             letter-spacing: 2px;
-            transition: transform 0.5s; /* Transição suave */
+            transition: transform 0.5s, color 0.5s; /* Transição suave */
         }
 
         @keyframes bounce {
@@ -139,13 +139,13 @@
             transition: color 0.5s; /* Transição suave */
         }
 
-        /* Rodapé */
         .footer {
             background-color: #1A202E;
             padding: 20px;
             text-align: center;
             color: #FFFFFF;
-            transition: background-color 0.5s; /* Transição suave */
+            transition: background-color 0.5s; 
+            margin-top: 232px;
         }
 
         .footer p {
@@ -167,6 +167,24 @@
 
         .game-card {
             animation: floating 3s ease-in-out infinite;
+        }
+
+        /* Modo Claro */
+        .light-mode .game-card {
+            background-color: #F0F0F0;
+            color: #000000;
+        }
+
+        .light-mode .game-card p {
+            color: #0000FF; /* Muda a cor do texto para azul no modo claro */
+        }
+
+        .light-mode .logo-container {
+            background-color: #0000FF; /* Muda a cor de fundo do logo para azul no modo claro */
+        }
+
+        .light-mode .site-title {
+            color: #000000; /* Muda a cor do título para preto no modo claro */
         }
     </style>
 </head>
@@ -227,20 +245,10 @@
             } else {
                 document.body.style.backgroundColor = '#0A0F1D';
                 document.body.style.color = '#FFFFFF';
-                document.gamecar.style.color = '#FFFFFF';
-                document.querySelectorAll('.game-card p').forEach(p => p.style.color = '#F49D37'); // Muda para laranja
+
+                document.querySelectorAll('.game-card p').forEach(p => p.style.color = '#F49D37'); // Volta ao padrão original
                 modeButton.textContent = 'Modo Claro';
             }
-        });
-
-        // Efeito ao passar o mouse no título
-        const logo = document.getElementById('logo');
-        logo.addEventListener('mouseover', () => {
-            logo.style.transform = 'rotate(5deg)'; // Rotação leve
-        });
-
-        logo.addEventListener('mouseout', () => {
-            logo.style.transform = 'rotate(0deg)'; // Retorna à posição original
         });
     </script>
 </body>
