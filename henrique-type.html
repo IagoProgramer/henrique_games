@@ -1,0 +1,448 @@
+<html><head><base href="/" />
+<title>Henrique Type - O Melhor Site de Digitação</title>
+<style>
+:root {
+  --bg-color: #1a1a1a;
+  --primary-color: #ff6b00;
+  --text-color: #999;
+  --error-color: #ff3333;
+  --success-color: #ffffff;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: 'JetBrains Mono', monospace;
+  background-color: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.logo {
+  font-size: 3rem;
+  color: var(--primary-color);
+  margin: 0;
+  font-weight: bold;
+  text-shadow: 0 0 10px rgba(255, 107, 0, 0.3);
+}
+
+.mode-selector {
+  display: flex;
+  gap: 1rem;
+  margin: 1rem 0;
+  justify-content: center;
+}
+
+.mode-btn {
+  background: transparent;
+  border: 2px solid var(--primary-color);
+  color: var(--primary-color);
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.mode-btn:hover {
+  background: var(--primary-color);
+  color: var(--bg-color);
+}
+
+.mode-btn.active {
+  background: var(--primary-color);
+  color: var(--bg-color);
+}
+
+.typing-area {
+  background: rgba(255, 107, 0, 0.1);
+  padding: 2rem;
+  border-radius: 8px;
+  margin: 2rem 0;
+  position: relative;
+}
+
+.text-display {
+  font-size: 1.5rem;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  white-space: pre-wrap;
+}
+
+.char {
+  position: relative;
+  transition: all 0.1s ease;
+}
+
+.char.correct {
+  color: var(--success-color);
+}
+
+.char.incorrect {
+  color: var(--error-color);
+}
+
+.char.current {
+  animation: blink 1s infinite;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 2rem;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+.stat-label {
+  color: var(--text-color);
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.language-selector {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+}
+
+.timer {
+  font-size: 2rem;
+  color: var(--primary-color);
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.restart-btn {
+  background: var(--primary-color);
+  color: var(--bg-color);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.restart-btn:hover {
+  transform: scale(1.05);
+}
+</style>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+<div class="container">
+  <header class="header">
+    <h1 class="logo">Henrique Type</h1>
+  </header>
+
+  <div class="mode-selector">
+    <button class="mode-btn active">Universal</button>
+    <button class="mode-btn">JavaScript</button>
+    <button class="mode-btn">Python</button>
+    <button class="mode-btn">Java</button>
+    <button class="mode-btn">C#</button>
+    <button class="mode-btn">HTML/CSS</button>
+  </div>
+
+  <select class="language-selector">
+    <option value="pt">Português</option>
+    <option value="en">English</option>
+  </select>
+
+  <div class="timer">60</div>
+
+  <div class="typing-area">
+    <div class="text-display"></div>
+  </div>
+
+  <div class="stats">
+    <div class="stat-item">
+      <div class="stat-value" id="wpm">0</div>
+      <div class="stat-label">WPM</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="accuracy">100%</div>
+      <div class="stat-label">Precisão</div>
+    </div>
+    <div class="stat-item">
+      <div class="stat-value" id="time">60s</div>
+      <div class="stat-label">Tempo</div>
+    </div>
+  </div>
+
+  <button class="restart-btn">Reiniciar</button>
+</div>
+
+<script>
+const texts = {
+  pt: {
+    universal: [
+      "JavaScript é uma linguagem versátil que permite criar aplicações web dinâmicas. ",
+      "Python é conhecido por sua simplicidade e legibilidade no código. ",
+      "Java continua sendo uma das linguagens mais utilizadas em empresas. ",
+      "C# é uma linguagem poderosa desenvolvida pela Microsoft. ",
+      "HTML e CSS são fundamentais para o desenvolvimento web moderno. ",
+      "React revolucionou a forma como construímos interfaces de usuário. ",
+      "Node.js permite usar JavaScript no backend das aplicações. ",
+      "TypeScript adiciona tipagem estática ao JavaScript. ",
+      "Angular é um framework robusto para aplicações enterprise. ",
+      "Vue.js oferece uma curva de aprendizado suave para iniciantes. "
+    ],
+    javascript: [
+      "const array = [1, 2, 3].map(x => x * 2); ",
+      "async function fetchData() { const response = await fetch(url); } ",
+      "document.querySelector('.className').addEventListener('click', callback); ",
+      "const promise = new Promise((resolve, reject) => { }); ",
+      "localStorage.setItem('key', JSON.stringify(data)); "
+    ],
+    python: [
+      "def calculate_sum(numbers: list) -> int: return sum(numbers) ",
+      "with open('file.txt', 'r') as file: content = file.read() ",
+      "class Person: def __init__(self, name): self.name = name ",
+      "from typing import List, Optional, Dict ",
+      "if __name__ == '__main__': main() "
+    ],
+    java: [
+      "public class Main extends Application implements Runnable { } ",
+      "private static final String CONSTANT = \"Value\"; ",
+      "List<String> list = new ArrayList<>(); ",
+      "public static void main(String[] args) { } ",
+      "@Override protected void onCreate(Bundle state) { } "
+    ],
+    csharp: [
+      "public sealed class Program { public static async Task Main() { } } ",
+      "using Microsoft.Extensions.DependencyInjection; using System.Threading.Tasks; ",
+      "private readonly ILogger<Controller> _logger; ",
+      "[ApiController] [Route(\"api/[controller]\")] public class WeatherController : ControllerBase { } ",
+      "services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer()); ",
+      "public record UserDto(int Id, string Name, string Email); ",
+      "await _context.SaveChangesAsync(); ",
+      "var result = await _mediator.Send(new GetUsersQuery()); ",
+      "protected override void ConfigureConventions(ModelConfigurationBuilder builder) { } ",
+      "[Required] public string FirstName { get; set; } = default!; "
+    ],
+    htmlcss: [
+      "<div class=\"container\"><h1>Título</h1></div> ",
+      "@media screen and (max-width: 768px) { } ",
+      "display: flex; justify-content: center; align-items: center; ",
+      "<form onSubmit={handleSubmit}><input type=\"text\" /> </form> ",
+      "<link rel=\"stylesheet\" href=\"styles.css\"> "
+    ]
+  },
+  en: {
+    universal: [
+      "JavaScript is a versatile language for creating dynamic web applications. ",
+      "Python is known for its code simplicity and readability. ",
+      "Java remains one of the most used languages in enterprise. ",
+      "C# is a powerful language developed by Microsoft. ",
+      "HTML and CSS are fundamental for modern web development. ",
+      "React revolutionized the way we build user interfaces. ",
+      "Node.js enables JavaScript usage in application backends. ",
+      "TypeScript adds static typing to JavaScript. ",
+      "Angular is a robust framework for enterprise applications. ",
+      "Vue.js offers a gentle learning curve for beginners. "
+    ],
+    javascript: [
+      "const array = [1, 2, 3].map(x => x * 2); ",
+      "async function fetchData() { const response = await fetch(url); } ",
+      "document.querySelector('.className').addEventListener('click', callback); ",
+      "const promise = new Promise((resolve, reject) => { }); ",
+      "localStorage.setItem('key', JSON.stringify(data)); "
+    ],
+    python: [
+      "def calculate_sum(numbers: list) -> int: return sum(numbers) ",
+      "with open('file.txt', 'r') as file: content = file.read() ",
+      "class Person: def __init__(self, name): self.name = name ",
+      "from typing import List, Optional, Dict ",
+      "if __name__ == '__main__': main() "
+    ],
+    java: [
+      "public class Main extends Application implements Runnable { } ",
+      "private static final String CONSTANT = \"Value\"; ",
+      "List<String> list = new ArrayList<>(); ",
+      "public static void main(String[] args) { } ",
+      "@Override protected void onCreate(Bundle state) { } "
+    ],
+    csharp: [
+      "public sealed class Program { public static async Task Main() { } } ",
+      "using Microsoft.Extensions.DependencyInjection; using System.Threading.Tasks; ",
+      "private readonly ILogger<Controller> _logger; ",
+      "[ApiController] [Route(\"api/[controller]\")] public class WeatherController : ControllerBase { } ",
+      "services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer()); ",
+      "public record UserDto(int Id, string Name, string Email); ",
+      "await _context.SaveChangesAsync(); ",
+      "var result = await _mediator.Send(new GetUsersQuery()); ",
+      "protected override void ConfigureConventions(ModelConfigurationBuilder builder) { } ",
+      "[Required] public string FirstName { get; set; } = default!; "
+    ],
+    htmlcss: [
+      "<div class=\"container\"><h1>Title</h1></div> ",
+      "@media screen and (max-width: 768px) { } ",
+      "display: flex; justify-content: center; align-items: center; ",
+      "<form onSubmit={handleSubmit}><input type=\"text\" /> </form> ",
+      "<link rel=\"stylesheet\" href=\"styles.css\"> "
+    ]
+  }
+};
+
+let currentMode = 'universal';
+let currentText = "";
+let currentIndex = 0;
+let startTime = null;
+let timerInterval = null;
+let timeLeft = 60;
+let mistakes = 0;
+let totalChars = 0;
+let isGameActive = false;
+let textBuffer = "";
+
+const textDisplay = document.querySelector('.text-display');
+const languageSelector = document.querySelector('.language-selector');
+const timerElement = document.querySelector('.timer');
+const wpmElement = document.getElementById('wpm');
+const accuracyElement = document.getElementById('accuracy');
+const timeElement = document.getElementById('time');
+const restartBtn = document.querySelector('.restart-btn');
+const modeBtns = document.querySelectorAll('.mode-btn');
+
+function getNextText(language) {
+  const modeTexts = texts[language][currentMode];
+  return modeTexts[Math.floor(Math.random() * modeTexts.length)];
+}
+
+function extendText() {
+  const language = languageSelector.value;
+  textBuffer += getNextText(language);
+  currentText = textBuffer;
+}
+
+function initGame() {
+  const language = languageSelector.value;
+  textBuffer = getNextText(language);
+  currentText = textBuffer;
+  currentIndex = 0;
+  mistakes = 0;
+  totalChars = 0;
+  timeLeft = 60;
+  isGameActive = true;
+  startTime = null;
+  clearInterval(timerInterval);
+  
+  displayText();
+  updateTimer();
+}
+
+function displayText() {
+  if (currentIndex > currentText.length - 50) {
+    extendText();
+  }
+  
+  const visibleText = currentText.substring(Math.max(0, currentIndex - 50), currentIndex + 50);
+  textDisplay.innerHTML = visibleText.split('').map((char, index) => {
+    const absoluteIndex = Math.max(0, currentIndex - 50) + index;
+    let className = 'char';
+    if (absoluteIndex < currentIndex) {
+      className += ' correct';
+    } else if (absoluteIndex === currentIndex) {
+      className += ' current';
+    }
+    return `<span class="${className}">${char}</span>`;
+  }).join('');
+}
+
+function updateStats() {
+  if (!startTime) return;
+  
+  const timeElapsed = (Date.now() - startTime) / 1000;
+  const words = totalChars / 5;
+  const wpm = Math.round((words / timeElapsed) * 60);
+  const accuracy = Math.round(((totalChars - mistakes) / totalChars) * 100) || 100;
+
+  wpmElement.textContent = wpm;
+  accuracyElement.textContent = `${accuracy}%`;
+}
+
+function startTimer() {
+  if (timerInterval) return;
+  
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    updateTimer();
+    if (timeLeft <= 0) {
+      endGame();
+    }
+  }, 1000);
+}
+
+function updateTimer() {
+  timerElement.textContent = timeLeft;
+  timeElement.textContent = `${timeLeft}s`;
+}
+
+function endGame() {
+  isGameActive = false;
+  clearInterval(timerInterval);
+  updateStats();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (!isGameActive) return;
+  
+  if (!startTime && e.key.length === 1) {
+    startTime = Date.now();
+    startTimer();
+  }
+
+  const expectedChar = currentText[currentIndex];
+  
+  if (e.key === expectedChar) {
+    totalChars++;
+    currentIndex++;
+  } else if (e.key.length === 1) {
+    mistakes++;
+  }
+
+  displayText();
+  updateStats();
+});
+
+languageSelector.addEventListener('change', initGame);
+restartBtn.addEventListener('click', initGame);
+
+modeBtns.forEach(btn => {
+  btn.addEventListener('click', () => {
+    modeBtns.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentMode = btn.textContent.toLowerCase().replace('/', '');
+    initGame();
+  });
+});
+
+
+initGame();
+</script>
+</body></html>
